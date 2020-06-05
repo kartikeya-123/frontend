@@ -16,21 +16,22 @@ const postSchema = new mongoose.Schema(
       required: [true, 'A post should contain info'],
       trim: true,
     },
-    upvotes: Number,
-    downVotes: Number,
-    rating_Average: {
-      type: Number,
-      min: [1, 'Rating must be above 1.0'],
-      max: [5, 'Rating must be below 5.0'],
-      set: (value) => Math.round(value * 10) / 10,
+    upvoted: {
+      type:mongoose.Schema.ObjectId,
+      ref:'User'
     },
+    downVoted: {
+      type:mongoose.Schema.ObjectId,
+      ref:'User'
+    }
+   
     createdAt: {
       type: Date,
       default: Date.now(),
     },
-    whitelist: {
+    blacklist: {
       type: Boolean,
-      default: true,
+      default: false,
     },
     User:{
       type:mongoose.Schema.ObjectId,
