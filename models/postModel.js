@@ -17,14 +17,14 @@ const postSchema = new mongoose.Schema(
       trim: true,
     },
     upvoted: {
-      type:mongoose.Schema.ObjectId,
-      ref:'User'
+      type: mongoose.Schema.ObjectId,
+      ref: 'User',
     },
     downVoted: {
-      type:mongoose.Schema.ObjectId,
-      ref:'User'
-    }
-   
+      type: mongoose.Schema.ObjectId,
+      ref: 'User',
+    },
+
     createdAt: {
       type: Date,
       default: Date.now(),
@@ -33,11 +33,11 @@ const postSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    User:{
-      type:mongoose.Schema.ObjectId,
-      ref:'User',
-      required:[true,'a post must belong to a user']
-    }
+    User: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'User',
+      required: [true, 'a post must belong to a user'],
+    },
   },
   {
     toJson: { virtuals: true },
@@ -46,10 +46,10 @@ const postSchema = new mongoose.Schema(
 );
 
 // populating the user for every post
-postSchema.pre(/^find/,function(next){
+postSchema.pre(/^find/, function (next) {
   this.populate({
     path: 'user',
-    select: 'name '
+    select: 'name ',
   });
   next();
 });
