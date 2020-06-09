@@ -1,77 +1,40 @@
 const Post = require('../models/postModel.js');
 const catchAsync = require('./../utils/catchAsync.js');
 const AppError = require('./../utils/appError'); // class//
+const factory = require('./handlerFactory.js');
 
 // getting all posts
-exports.getAllPosts = catchAsync(async (req, res, next) => {
-  const posts = await Post.find();
-  res.status(200).json({
-    status: 'success',
-    data: {
-      data: posts,
-    },
-  });
-});
+exports.getAllPosts = factory.getAll(Post);
 
 //creating post
-exports.createPost = catchAsync(async (req, res, next) => {
-  const newPost = await Post.create(req.body);
-  res.status(201).json({
-    status: 'success',
-    data: {
-      newPost,
-    },
-  });
-});
+exports.createPost = factory.createOne(Post);
 
 //getting a certain post
 
-exports.getPost = catchAsync(async (req, res, next) => {
-  const post = Post.findById(req.params.id);
-  if (!post) {
-    return next(new AppError('there is no post with this id', 403));
-  }
-  res.status(200).json({
-    status: 'success',
-    data: {
-      post,
-    },
-  });
-});
+exports.getPost = factory.getOne(Post);
 
 // updating a post by only admin//
 
-exports.updatePost = catchAsync(async (req, res, next) => {
-  const doc = Post.findByIdAndUpdate(req.params.id, req.body, {
-    new: true, // shows the new updated post//
-    runValidators: true,
-  });
-
-  if (!doc) {
-    return next(new AppError('there is no post with this id', 403));
-  }
-
-  res.status(200).json({
-    status: 'success',
-    data: {
-      data: post,
-    },
-  });
-});
+exports.updatePost = factory.updateOne(Post);
 
 // a user can delete his posts//
-exports.deletePost = catchAsync(async (rea, res, next) => {
-  const post = await Post.findById(req.params.id);
 
+exports.deletePost = factory.deleteOne(Post);
+
+exports.BlacklistPost = catchAsync(async (req, res, next) => {
+  const post = await Post.findById(req.params.id).select('+Blacklist');
   if (!post) {
-    return next(new AppError('there is no post with this id', 403));
+    return nect(new AppError('there is no post with this id', 400));
   }
-  // if(req.user.id !== post.User._id){
-  //   return next (new AppError('Sorry you are not the owner of this post',403));
-  // }
-  await Post.findByIdAndDelete(req.params.id);
-  res.status(204).json({
-    status: 'success',
-    data: null,
-  });
+
+  if (!post.Blacklist) {
+    post.Blacklist = true;
+    await post.save({ runValidators: false });
+    res.status(200).json({
+      status: 'success',
+      message: 'post has been successfully blacklisted by the admin',
+    });
+  }
 });
+
+exports.checkBlacklist = factory.checkBlacklist(Post);

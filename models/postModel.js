@@ -16,27 +16,27 @@ const postSchema = new mongoose.Schema(
       required: [true, 'A post should contain info'],
       trim: true,
     },
-    upvoted: {
+    upvotedBy: {
       type: mongoose.Schema.ObjectId,
       ref: 'User',
     },
-    downVoted: {
+    downvotedBy: {
       type: mongoose.Schema.ObjectId,
       ref: 'User',
     },
-
+    upvotes: Number,
+    downvotes: Number,
     createdAt: {
       type: Date,
       default: Date.now(),
     },
-    blacklist: {
+    Blacklist: {
       type: Boolean,
       default: false,
     },
     User: {
       type: mongoose.Schema.ObjectId,
       ref: 'User',
-      required: [true, 'a post must belong to a user'],
     },
   },
   {
