@@ -3,7 +3,7 @@ import Table from "./../Table/Table";
 
 const starter = (props) => {
   return (
-    <div>
+    <div style={("display" = "inline-table")}>
       <Table dishes={props.veg} />
       <Table dishes={props.nonveg} />
     </div>

@@ -6,9 +6,10 @@ th {
 
 table {
   border-collapse: collapse;
-  width: 50%;
+  width: 25%;
+  background-color: rgba(99, 4, 4, 0.295);
 }
 
 th {
-  height: 50px;
+  height: 25px;
 }
