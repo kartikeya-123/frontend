@@ -117,7 +117,7 @@ exports.login = catchAsync(async (req, res, next) => {
 
   const { email, password } = req.body;
 
-  const user = await User.findOne({ email }).select('+password', 'Blacklist');
+  const user = await User.findOne({ email }).select('+password');
   if (user.Blacklist) {
     return next(
       new AppError('sorry you have been blacklisted by the admin', 400)

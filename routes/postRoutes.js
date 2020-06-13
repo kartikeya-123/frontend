@@ -15,9 +15,16 @@ router.patch(
   authController.restrictTo('admin'),
   postController.BlacklistPost
 );
+router.patch('/upvote/:id', authController.protect, postController.upvotePost);
+router.patch(
+  '/downvote/:id',
+  authController.protect,
+  postController.downvotePost
+);
+
 router
   .route('/:id')
-  .get(postController.getPost)
+  .get(postController.checkBlacklist, postController.getPost)
   .patch(
     authController.protect,
     authController.restrictTo('admin'),
@@ -29,5 +36,4 @@ router
     authController.restrictTo('admin'),
     postController.deletePost
   );
-
 module.exports = router;

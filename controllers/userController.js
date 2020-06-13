@@ -54,3 +54,24 @@ exports.getUser = factory.getOne(User);
 exports.updateUser = factory.updateOne(User);
 
 exports.deleteUser = factory.deleteOne(User);
+
+exports.BlacklistUser = catchAsync(async (req, res, next) => {
+  const user = await User.findById(req.params.id).select('+Blacklist');
+  if (!user) {
+    return next(new AppError('there is no user with this id', 400));
+  }
+
+  if (!user.Blacklist) {
+    user.Blacklist = true;
+    await user.save({ runValidators: false });
+    res.status(200).json({
+      status: 'success',
+      message: 'User has been successfully blacklisted by the admin',
+    });
+    next();
+  }
+
+  return next(new AppError('already blacklisted by the admin', 400));
+});
+
+exports.checkBlacklist = factory.checkBlacklist(User);

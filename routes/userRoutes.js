@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.post('/signup', authController.signup);
 router.post('/signup/:token', authController.signupVerification);
-
+// router.use(userController.BlacklistUser);
 router.post('/login', authController.login);
 
 router.post('/forgotPassword', authController.forgotPassword);

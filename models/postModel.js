@@ -16,16 +16,26 @@ const postSchema = new mongoose.Schema(
       required: [true, 'A post should contain info'],
       trim: true,
     },
-    upvotedBy: {
-      type: mongoose.Schema.ObjectId,
-      ref: 'User',
+    upvotedBy: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: 'User',
+      },
+    ],
+    downvotedBy: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: 'User',
+      },
+    ],
+    upvotes: {
+      type: Number,
+      default: 0,
     },
-    downvotedBy: {
-      type: mongoose.Schema.ObjectId,
-      ref: 'User',
+    downvotes: {
+      type: Number,
+      default: 0,
     },
-    upvotes: Number,
-    downvotes: Number,
     createdAt: {
       type: Date,
       default: Date.now(),
@@ -34,7 +44,7 @@ const postSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    User: {
+    users: {
       type: mongoose.Schema.ObjectId,
       ref: 'User',
     },
@@ -48,8 +58,11 @@ const postSchema = new mongoose.Schema(
 // populating the user for every post
 postSchema.pre(/^find/, function (next) {
   this.populate({
-    path: 'user',
-    select: 'name ',
+    path: 'upvotedBy',
+    select: 'name',
+  }).populate({
+    path: 'downvotedBy',
+    select: 'name',
   });
   next();
 });
