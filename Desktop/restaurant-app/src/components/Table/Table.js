@@ -1,6 +1,6 @@
 import React from "react";
 import Aux from "./../../hoc/Auxil/Auxil";
-import "./Table.css";
+import classes from "./Table.css";
 const table = (props) => {
   let content = Object.keys(props.dishes).map((dish, i) => {
     return (
@@ -11,7 +11,7 @@ const table = (props) => {
     );
   });
   return (
-    <table className="table">
+    <table className={classes.table}>
       <tr>
         <th>DISHES</th>
         <th>PRICES</th>

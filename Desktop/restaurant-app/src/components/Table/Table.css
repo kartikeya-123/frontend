@@ -1,15 +1,8 @@
-table,
-td,
-th {
-  border: 1px solid black;
-}
-
-table {
+.table {
   border-collapse: collapse;
   width: 25%;
   background-color: rgba(99, 4, 4, 0.295);
-}
-
-th {
-  height: 25px;
+  color: white;
+  border-style: solid;
+  border-color: brown;
 }
