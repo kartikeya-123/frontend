@@ -1,0 +1,14 @@
+.Content {
+  margin-top: 10px;
+  margin-left: 56px;
+}
+.Welcome {
+  margin-top: 50px;
+  height: 200px;
+  width: 100%;
+  background-color: lightgray;
+  color: black;
+  font-size: 250%;
+  font-weight: bold;
+  padding: 100px 0px 0px 40px;
+}
