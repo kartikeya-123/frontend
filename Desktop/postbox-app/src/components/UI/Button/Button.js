@@ -3,8 +3,26 @@ import "./Button.css";
 
 const button = (props) => {
   // if(props.btnType="Success")
+  let classProperty;
+  switch (props.btnType) {
+    case "Success":
+      classProperty = "Button Success";
+      break;
+    case "Danger":
+      classProperty = "Button Danger";
+      break;
+    case "Authenticate":
+      classProperty = "Button Authenticate";
+      break;
+    default:
+      classProperty = "Button";
+      break;
+  }
+  if (props.selected) {
+    classProperty = "disabled";
+  }
   return (
-    <button className="Button Success" onClick={props.clicked}>
+    <button className={classProperty} onClick={props.clicked}>
       {props.children}
     </button>
   );

@@ -1,10 +1,10 @@
-.Loader,
-.Loader:before,
-.Loader:after {
+.loader,
+.loader:before,
+.loader:after {
   border-radius: 50%;
 }
-.Loader {
-  color: #416d3b;
+.loader {
+  color: #c31313;
   font-size: 11px;
   text-indent: -99999em;
   margin: 55px auto;
@@ -16,15 +16,15 @@
   -ms-transform: translateZ(0);
   transform: translateZ(0);
 }
-.Loader:before,
-.Loader:after {
+.loader:before,
+.loader:after {
   position: absolute;
   content: "";
 }
-.Loader:before {
+.loader:before {
   width: 5.2em;
   height: 10.2em;
-  background: #f5f6f4;
+  background: #fcfdfc;
   border-radius: 10.2em 0 0 10.2em;
   top: -0.1em;
   left: -0.1em;
@@ -33,10 +33,10 @@
   -webkit-animation: load2 2s infinite ease 1.5s;
   animation: load2 2s infinite ease 1.5s;
 }
-.Loader:after {
+.loader:after {
   width: 5.2em;
   height: 10.2em;
-  background: #f5f6f4;
+  background: #fcfdfc;
   border-radius: 0 10.2em 10.2em 0;
   top: -0.1em;
   left: 4.9em;

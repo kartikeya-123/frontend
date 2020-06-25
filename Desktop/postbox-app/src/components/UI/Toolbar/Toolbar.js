@@ -4,7 +4,7 @@ import NavigationItems from "./../../Navigation/NavigationItems/NavigationItems"
 const toolbar = (props) => (
   <header className="toolbar">
     <nav>
-      <NavigationItems />
+      <NavigationItems isLoggedin={props.isLoggedin} />
     </nav>
   </header>
 );

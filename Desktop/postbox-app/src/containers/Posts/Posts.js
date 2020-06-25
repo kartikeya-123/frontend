@@ -8,19 +8,36 @@ import Spinner from "./../../components/UI/Spinner/Spinner";
 class Posts extends Component {
   state = {
     posts: [],
-    loading: true,
+    isLoading: true,
+  };
+
+  checkIsLoggedIn = () => {
+    this.setState({ isLoading: true });
+    axios
+      .get("http://localhost:7000/api/v1/users/loginStatus", {
+        withCredentials: true,
+      })
+      .then((response) => {
+        console.log(response.data);
+        this.setState({ isLoggedin: true, isLoading: false });
+      })
+      .catch((err) => {
+        console.log(err);
+        this.setState({ isLoading: false });
+      });
   };
 
   componentDidMount() {
     // connecting with server
     console.log(this.props);
-
+    this.setState({ isLoading: true });
     axios
       .get("http://localhost:7000/api/v1/posts")
       .then((response) => {
         // console.log(response.data.data.docs);
         const posts = response.data.data.docs.slice(0, 8);
-        this.setState({ posts: posts, loading: false });
+        this.setState({ posts: posts, isLoading: false });
+        this.checkIsLoggedIn();
       })
       .catch((error) => {
         console.log(error);
@@ -29,11 +46,14 @@ class Posts extends Component {
 
   fullPostHandler = (id) => {
     // window.alert("post clicked");
-    this.props.history.push("/posts/" + id);
+    this.props.history.push({
+      pathname: "/posts/" + id,
+      state: { isLoggedin: this.state.isLoggedin },
+    });
   };
   render() {
     let posts;
-    if (this.state.location) {
+    if (this.state.isLoading) {
       posts = <Spinner />;
     } else {
       posts = this.state.posts.map((currPost) => {
@@ -44,6 +64,7 @@ class Posts extends Component {
             upvotes={currPost.upvotes}
             key={currPost._id}
             clicked={() => this.fullPostHandler(currPost._id)}
+            isLoggedin={this.state.isLoggedin}
           />
         );
       });

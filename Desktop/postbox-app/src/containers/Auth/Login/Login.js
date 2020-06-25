@@ -1,27 +1,34 @@
 import React, { Component } from "react";
 // import Aux from "./../../hoc/Auxil/Auxil";
-import Button from "./../../components/UI/Button/Button";
+import Button from "../../../components/UI/Button/Button";
+import Spinner from "../../../components/UI/Spinner/Spinner";
 import axios from "axios";
-import "./Auth.css";
+import "./Login.css";
+import { NavLink } from "react-router-dom";
 class Auth extends Component {
   state = {
     email: "",
     password: "",
     isLoggedin: false,
+    isLoading: true,
   };
   ///
   //if a user is logged in we have to get the status from the backend//
 
   checkIsLoggedIn = () => {
+    this.setState({ isLoading: true });
     axios
       .get("http://localhost:7000/api/v1/users/loginStatus", {
         withCredentials: true,
       })
       .then((response) => {
         console.log(response.data);
-        this.setState({ isLoggedin: true });
+        this.setState({ isLoggedin: true, isLoading: false });
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        this.setState({ isLoading: false });
+      });
   };
   componentDidMount() {
     this.checkIsLoggedIn();
@@ -49,7 +56,9 @@ class Auth extends Component {
       .then((response) => {
         // console.log(response.data);
 
-        this.setState({ isLoggedin: true });
+        this.setState({ isLoggedin: true, isLoading: false });
+        this.props.history.push("/");
+        window.location.reload(false);
       })
       .catch((error) => {
         window.alert("invalid email or password");
@@ -68,33 +77,40 @@ class Auth extends Component {
       })
       .catch((err) => console.log(err));
   };
-
+  signupState = () => {
+    this.setState({ toSignup: true });
+  };
   render() {
     let loggedInPage = (
       <div className="Login">
-        <h1>You can Login here</h1>
+        <div className="Form">
+          <h1>Login</h1>
+          <input
+            type="email"
+            value={this.state.email}
+            onChange={(event) => this.setState({ email: event.target.value })}
+            placeholder="Your Email Id"
+            required
+          />
+          <br></br>
+          <br></br>
 
-        <label className="Email"> Email</label>
-        <input
-          type="email"
-          value={this.state.email}
-          onChange={(event) => this.setState({ email: event.target.value })}
-          placeholder="Your Email Id"
-          required
-        />
-        <br></br>
-        <br></br>
-        <label>Password</label>
-        <input
-          type="password"
-          value={this.state.password}
-          onChange={(event) => this.setState({ password: event.target.value })}
-          placeholder="Your Password"
-          required
-        />
-        <Button btnType="Success" clicked={this.loginUserHandler}>
-          Sign In
-        </Button>
+          <input
+            type="password"
+            value={this.state.password}
+            onChange={(event) =>
+              this.setState({ password: event.target.value })
+            }
+            placeholder="Your Password"
+            required
+          />
+          <Button btnType="Success" clicked={this.loginUserHandler}>
+            Sign In
+          </Button>
+          <p>
+            Not a member ?<NavLink to="/signup">Sign up</NavLink>
+          </p>
+        </div>
       </div>
     );
 
@@ -107,7 +123,7 @@ class Auth extends Component {
       );
     }
 
-    return <div>{loggedInPage}</div>;
+    return <div>{!this.state.isLoading ? loggedInPage : <Spinner />}</div>;
   }
 }
 

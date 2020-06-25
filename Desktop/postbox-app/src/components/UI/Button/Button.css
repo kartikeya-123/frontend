@@ -5,6 +5,7 @@
   outline: none;
   cursor: pointer;
   font: inherit;
+  font-size: large;
   padding: 10px;
   margin: 10px;
   font-weight: bold;
@@ -16,9 +17,25 @@
 }
 
 .Success {
-  color: #5c9210;
+  color: #b0e763;
+}
+.Danger {
+  color: rgb(204, 81, 81);
 }
 
-.Danger {
-  color: #944317;
+.Danger:hover,
+.Danger:active {
+  color: rgb(177, 12, 12);
+}
+.Authenticate {
+  color: rgb(14, 162, 211);
+}
+.Success:hover,
+.Success:active {
+  color: rgba(6, 199, 6, 0.959);
+}
+
+.Authenticate:hover,
+.Authenticate:active {
+  color: rgba(34, 12, 238, 0.959);
 }
