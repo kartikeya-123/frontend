@@ -1,0 +1,26 @@
+.FullPost {
+  width: 80%;
+  margin: 10px auto;
+  height: 330px;
+  border: 1px solid #eee;
+  box-shadow: 0 2px 3px #ccc;
+  text-align: center;
+}
+
+.Properties {
+  display: flex;
+  justify-content: space-between;
+  align-items: left;
+  padding: 2px 1px;
+  margin: 2px 5px;
+
+  box-sizing: border-box;
+  z-index: 90;
+}
+
+.Votes {
+  color: black;
+  margin: auto;
+  padding: 10px 1px;
+  bottom: 50px;
+}
