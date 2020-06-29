@@ -22,3 +22,23 @@
 .NavigationItem a:active {
   border-bottom: 4px solid #81d434;
 }
+.NavigationItemmy-posts {
+  margin: 0px;
+  box-sizing: border-box;
+  height: 50%;
+  display: flex;
+  width: auto;
+  align-items: center;
+}
+
+.NavigationItemmy-posts a {
+  color: rgb(2, 23, 212);
+  height: 100%;
+  margin-bottom: 25px;
+  padding: 0px 10px;
+  text-decoration: none;
+  font-weight: bolder;
+  border-bottom: 4px solid transparent;
+  display: block;
+  box-sizing: border-box;
+}

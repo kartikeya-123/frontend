@@ -27,15 +27,31 @@
 .Danger:active {
   color: rgb(177, 12, 12);
 }
-.Authenticate {
-  color: rgb(14, 162, 211);
-}
+
 .Success:hover,
 .Success:active {
   color: rgba(6, 199, 6, 0.959);
 }
 
-.Authenticate:hover,
+.Authenticate {
+  padding: 15px 25px;
+  font-size: 16px;
+  text-align: center;
+  cursor: pointer;
+  outline: none;
+  color: #fff;
+  background-color: #4caf50;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 9px #999;
+}
+
+.Authenticate:hover {
+  background-color: #3e8e41;
+}
+
 .Authenticate:active {
-  color: rgba(34, 12, 238, 0.959);
+  background-color: #3e8e41;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
 }

@@ -12,7 +12,7 @@ const button = (props) => {
       classProperty = "Button Danger";
       break;
     case "Authenticate":
-      classProperty = "Button Authenticate";
+      classProperty = " Authenticate";
       break;
     default:
       classProperty = "Button";

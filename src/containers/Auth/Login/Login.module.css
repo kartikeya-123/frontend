@@ -10,11 +10,11 @@
   background: #ffffff;
   max-width: 360px;
   margin: 0 auto 100px;
-  padding: 45px;
+  padding: 35px;
   text-align: center;
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 }
-.Form input {
+/* .Form input {
   font-family: "Roboto", sans-serif;
   outline: 0;
   background: #f2f2f2;
@@ -24,7 +24,7 @@
   padding: 12px;
   box-sizing: border-box;
   font-size: 14px;
-}
+} */
 .Form h1 {
   color: royalblue;
   font-style: inherit;
@@ -34,8 +34,8 @@
   box-sizing: content-box;
 }
 @media (min-width: 600px) {
-  .ContactData {
-    width: 500px;
+  .Login {
+    width: 400px;
   }
 }
 

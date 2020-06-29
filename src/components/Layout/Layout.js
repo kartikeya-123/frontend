@@ -8,12 +8,15 @@ import NewPost from "./../../containers/NewPost/NewPost";
 import Login from "../../containers/Auth/Login/Login";
 import Signup from "../../containers/Auth/SignUp/Signup";
 import { Route, Switch } from "react-router-dom";
+import MyPosts from "./../Profile/MyPosts/MyPosts";
 import axios from "axios";
+import UserContext, { UserProvider } from "./../../hoc/Context/UserContext";
+
 class Layout extends Component {
   state = {
     isLoggedin: false,
   };
-
+  static contextType = UserContext;
   checkIsLoggedIn = () => {
     axios
       .get("http://localhost:7000/api/v1/users/loginStatus", {
@@ -31,28 +34,33 @@ class Layout extends Component {
     // console.log("checking status");
     this.checkIsLoggedIn();
   }
-  // componentWillMount() {
-  //   this.checkIsLoggedIn();
-  // }
+  // s
 
   render() {
     return (
-      <Aux>
-        <Toolbar isLoggedin={this.state.isLoggedin} />
-        <article className="Welcome">WELCOME TO POSTBOX</article>
-        <body>
-          <div>
-            <Switch>
-              <Route path="/" exact component={Posts} />
-              <Route path="/signup" exact component={Signup} />
-              <Route path="/login" exact component={Login} />
-              <Route path="/posts/:id" exact component={FullPost} />
-              <Route path="/new-post" exact component={NewPost} />
-              <Route render={() => <h1>PAGE NOT FOUND</h1>} />
-            </Switch>
-          </div>
-        </body>
-      </Aux>
+      <UserProvider
+        value={{
+          isLoggedin: this.state.isLoggedin,
+        }}
+      >
+        <Aux>
+          <Toolbar />
+          <article className="Welcome">WELCOME TO POSTBOX</article>
+          <body>
+            <div>
+              <Switch>
+                <Route path="/" exact component={Posts} />
+                <Route path="/signup" exact component={Signup} />
+                <Route path="/login" exact component={Login} />
+                <Route path="/posts/:id" exact component={FullPost} />
+                <Route path="/new-post" exact component={NewPost} />
+                <Route path="/my-posts" exact component={MyPosts} />
+                <Route render={() => <h1>PAGE NOT FOUND</h1>} />
+              </Switch>
+            </div>
+          </body>
+        </Aux>
+      </UserProvider>
     );
   }
 }

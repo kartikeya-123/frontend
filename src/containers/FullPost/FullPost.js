@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Button from "./../../components/UI/Button/Button";
 import axios from "axios";
-
+import UserContext from "./../../hoc/Context/UserContext";
 import "./FullPost.css";
 
 class FullPost extends Component {
@@ -10,9 +10,8 @@ class FullPost extends Component {
     upvoted: false,
     downvoted: false,
   };
-
+  static contextType = UserContext;
   componentDidMount() {
-    console.log(this.props.location.state.isLoggedin);
     this.loadData();
   }
 
@@ -56,10 +55,12 @@ class FullPost extends Component {
   //   };
 
   upvotedPost = () => {
+    const post = this.state.loadedPost;
     axios
-      .get(
+      .patch(
         "http://localhost:7000/api/v1/posts/upvote/" +
           this.props.match.params.id,
+        post,
         { withCredentials: true }
       )
       .then((response) => {
@@ -69,10 +70,12 @@ class FullPost extends Component {
   };
 
   downVotedPost = () => {
+    const post = this.state.loadedPost;
     axios
-      .get(
+      .patch(
         "http://localhost:7000/api/v1/posts/downvote/" +
           this.props.match.params.id,
+        post,
         { withCredentials: true }
       )
       .then((response) => {
@@ -97,7 +100,7 @@ class FullPost extends Component {
             </button>
           </div> */}
           <h4>Post By : {this.state.loadedPost.author}</h4>
-          {!this.props.location.state.isLoggedin ? (
+          {!this.context.isLoggedin ? (
             <div className="Properties">
               <p className="Votes">upvotes:{this.state.loadedPost.upvotes}</p>
               <p className="Votes">
