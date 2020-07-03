@@ -1,26 +1,60 @@
 .Post {
-  width: 250px;
+  width: 70%;
   padding: 16px;
-  height: 250px;
+  height: 330px;
   text-align: center;
   border: 1px solid #eee;
-  box-shadow: 0 2px 3px #ccc;
+  box-shadow: 4px 4px 4px rgb(197, 186, 186);
   margin: 10px;
   box-sizing: border-box;
+  /* cursor: pointer; */
+  position: relative;
+  background-color: whitesmoke;
+  border-radius: 10px;
+}
+@media only screen and (max-width: 900px) {
+  .Post {
+    width: 540px;
+    height: 350px;
+  }
+}
+@media (max-width: 600px) {
+  .Post {
+    width: 100%;
+    height: 310px;
+  }
+}
+/* .Post:hover,
+.Post:active {
+  background-color: #d6e5f1;
+} */
+.Heading {
+  color: rgb(180, 96, 110) !important;
+  font-family: Georgia, "Times New Roman", serif !important;
+  font-size: 24px !important;
+  font-style: italic !important;
+  font-weight: bolder !important;
+  text-align: center !important;
+  text-decoration: none !important;
+  text-transform: uppercase !important;
+}
+.Author {
+  margin: 16px 0px 0px 0px;
+  color: black;
+  font-weight: bold;
+  position: relative;
+  text-align: left;
+}
+.Body {
+  position: relative;
+  text-align: left;
+  /* padding: 10px; */
+}
+.Read {
+  color: rgb(204, 193, 193);
   cursor: pointer;
 }
-
-.Post:hover,
-.Post:active {
-  background-color: #c0ddf5;
-}
-
-.Author {
-  margin: 16px 0;
-  color: #ccc;
-}
-
-.Upvotes {
+.Votes {
   color: black;
   margin: 5px auto;
   padding: 2px;
@@ -28,4 +62,19 @@
   vertical-align: baseline;
   width: 50%;
   box-sizing: border-box;
+}
+.Properties {
+  display: flex;
+  justify-content: space-between;
+  align-items: left;
+  padding: 10px 1px 1px 1px;
+  margin: 2px 5px;
+  align-items: stretch;
+  position: absolute;
+  width: 90%;
+  bottom: 0px;
+  left: 20px;
+  border-top: 1px solid rgb(117, 98, 98);
+  box-sizing: border-box;
+  z-index: 90;
 }

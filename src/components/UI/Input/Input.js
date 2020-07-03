@@ -1,10 +1,10 @@
 import React from "react";
-import "./Input.module.css";
+import classes from "./Input.css";
 
 const input = (props) => {
   let validationError;
   let inputElement = null;
-  const inputClasses = "InputElement";
+  const inputClasses = [classes.InputElement];
 
   //   if (props.inValid && props.touched) {
   //     inputClasses.push(classes.Invalid);
@@ -14,7 +14,7 @@ const input = (props) => {
     case "input":
       inputElement = (
         <input
-          className="InputElement"
+          className={inputClasses.join(" ")}
           {...props.elementConfig}
           onChange={props.changedValue}
         />
@@ -55,8 +55,8 @@ const input = (props) => {
       );
   }
   return (
-    <div className="Input">
-      <label className="Label">{props.label}</label>
+    <div className={classes.Input}>
+      <label className={classes.Label}>{props.label}</label>
       {inputElement}
       {validationError}
     </div>

@@ -1,5 +1,5 @@
 .toolbar {
-  height: 50px;
+  height: 55px;
   width: 100%;
   position: fixed;
   top: 0;
@@ -12,7 +12,17 @@
   box-sizing: border-box;
   z-index: 90;
 }
-
+.Logo {
+  height: 10%;
+}
+.header {
+  color: rgb(206, 136, 7);
+}
 .toolbar nav {
   height: 100%;
+}
+@media (max-width: 499px) {
+  .DesktopOnly {
+    display: none;
+  }
 }

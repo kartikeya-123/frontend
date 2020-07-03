@@ -1,15 +1,15 @@
 import React, { Component } from "react";
-// import Aux from "./../../../hoc/Auxil/Auxil";
-import Spinner from "../../../components/UI/Spinner/Spinner";
+import Aux from "./../../hoc/Auxil/Auxil";
+import Spinner from "../../components/UI/Spinner/Spinner";
 import axios from "axios";
-import classes from "./Login.css";
-import UserContext from "./../../../hoc/Context/UserContext";
-import { Link } from "react-router-dom";
-import Input from "./../../../components/UI/Input/Input";
-import Button from "./../../../components/UI/Button/Button";
-import Modal from "./../../../components/UI/Modal/Modal";
-import NavigationItem from "../../../components/Navigation/NavigationItem/NavigationItem";
-class Auth extends Component {
+import classes from "./Login/Login.css";
+import UserContext from "./../../hoc/Context/UserContext";
+// import { Link } from "react-router-dom";
+import Input from "../../components/UI/Input/Input";
+import Button from "../../components/UI/Button/Button";
+// import NavigationItem from "../../components/Navigation/NavigationItem/NavigationItem";
+import ResetPassword from "./ResetPassword";
+class ForgotPassword extends Component {
   state = {
     LoginForm: {
       email: {
@@ -21,20 +21,7 @@ class Auth extends Component {
         value: "",
         validation: {
           required: true,
-        },
-        valid: false,
-        touched: false,
-      },
-      password: {
-        elementType: "input",
-        elementConfig: {
-          type: "password",
-          placeholder: "Your Password",
-        },
-        value: "",
-        validation: {
-          required: true,
-          minLength: 8,
+          isEmail: true,
         },
         valid: false,
         touched: false,
@@ -42,7 +29,7 @@ class Auth extends Component {
     },
     isLoading: false,
     isLoggedin: false,
-    show: false,
+    resetTokenSent: false,
   };
   static contextType = UserContext;
   ///
@@ -67,38 +54,27 @@ class Auth extends Component {
     this.setState({ isLoggedin: this.context.isLoggedin });
   }
 
-  loginUserHandler = (event) => {
+  resetTokenSent = (event) => {
     event.preventDefault();
+    this.setState({ isLoading: true });
     const user = {
       email: this.state.LoginForm.email.value,
-      password: this.state.LoginForm.password.value,
     };
     console.log(user);
 
     axios
-      .post("http://localhost:7000/api/v1/users/login", user, {
+      .post("http://localhost:7000/api/v1/users/forgotPassword", user, {
         withCredentials: true,
       })
       .then((response) => {
         console.log(response.data);
-        this.setState({ isLoggedin: true, isLoading: false, show: true });
+        this.setState({ resetTokenSent: true, isLoading: false });
+        // this.props.history.push("/");
+        // window.location.reload(false);
       })
       .catch((error) => {
-        window.alert("invalid email or password");
+        console.log(error);
       });
-  };
-
-  logoutUserHandler = (props) => {
-    axios
-      .get("http://localhost:7000/api/v1/users/logout", {
-        withCredentials: true,
-      })
-      .then((response) => {
-        // console.log(response.data);
-        // this.setState({ isLoggedin: false });
-        window.location.reload(false);
-      })
-      .catch((err) => console.log(err));
   };
 
   checkValidity(value, rules) {
@@ -131,11 +107,6 @@ class Auth extends Component {
     // console.log(updatedFormElement);
     this.setState({ LoginForm: updatedOrderForm, touched: true });
   };
-
-  continue = () => {
-    this.props.history.push("/");
-    window.location.reload(false);
-  };
   render() {
     const formElementsArray = [];
 
@@ -148,7 +119,11 @@ class Auth extends Component {
     let form = (
       <div className={classes.Login}>
         <div className={classes.Form}>
-          <h2>Login</h2>
+          <h1>Forgot Password</h1>
+          <p>
+            No Problem! We will send you an instruction email to reset your
+            password.
+          </p>
           {formElementsArray.map((formElement) => (
             <Input
               key={formElement.id}
@@ -162,53 +137,30 @@ class Auth extends Component {
               }
             />
           ))}
-          <span className={classes.Forgot}>
-            <p className={classes.link}>
-              <Link to="/forgotPassword">Forgot Password</Link>
-            </p>
-          </span>
+          <br></br>
           <div className={classes.Button}>
-            <Button btnType="Authenticate" clicked={this.loginUserHandler}>
-              Login
+            <Button btnType="Authenticate" clicked={this.resetTokenSent}>
+              Send Email
             </Button>
           </div>
-          <span className={classes.left}>
-            <p className={classes.link}>
-              <Link to="/signup">Not a member? Sign Up</Link>
-            </p>
-          </span>
         </div>
       </div>
     );
-    if (this.context.isLoggedin) {
-      form = (
-        <div>
-          <h1>YOU Are Logged In</h1>
-          <NavigationItem link="/my-posts" classProperty="my-posts">
-            My Posts
-          </NavigationItem>
-          <Button btnType="Danger" clicked={this.logoutUserHandler}>
-            LOGOUT
-          </Button>
-        </div>
-      );
-    }
-    const loggedinSuccessfully = (
-      <div>
-        <p>Welcome back to Postbox</p>
-        <p>You are successfully logged in</p>
-        <Button btnType="Success" clicked={this.continue}>
-          Continue
-        </Button>
-      </div>
-    );
+
     return (
-      <div className={classes.Body}>
-        <Modal show={this.state.show}>{loggedinSuccessfully}</Modal>
-        {!this.state.isLoading ? form : <Spinner />}
-      </div>
+      <Aux>
+        {!this.state.isLoading ? (
+          this.state.resetTokenSent ? (
+            <ResetPassword email={this.state.LoginForm.email.value} />
+          ) : (
+            form
+          )
+        ) : (
+          <Spinner />
+        )}
+      </Aux>
     );
   }
 }
 
-export default Auth;
+export default ForgotPassword;

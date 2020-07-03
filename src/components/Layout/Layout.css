@@ -1,4 +1,4 @@
-.Welcome {
+/* .Welcome {
   margin-top: 50px;
   height: 150px;
   width: 100%;
@@ -7,8 +7,10 @@
   font-size: 200%;
   font-weight: bold;
   padding: 100px 0px 0px 32px;
-}
-body {
+} */
+Body {
+  margin-top: 65px;
   height: 300%;
   width: 100%;
+  background-color: rgb(231, 230, 230);
 }

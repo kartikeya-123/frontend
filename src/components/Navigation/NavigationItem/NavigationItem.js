@@ -1,17 +1,21 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import "./NavigationItem.css";
+import classes from "./NavigationItem.css";
 
 const NavigationItem = (props) => {
-  let classProperty = "NavigationItem";
+  let classProperty = classes.NavigationItem;
   switch (props.classProperty) {
     case "my-posts":
-      classProperty = "NavigationItemmy-posts";
+      classProperty = classes.NavigationItemmyposts;
       break;
     default:
       break;
   }
-
+  // let icon = {props.children};
+  // let icon;
+  // if (props.icon === "home") {
+  //   icon = <AiOutlineHome>{props.children}</AiOutlineHome>;
+  // }
   return (
     <li className={classProperty}>
       <NavLink

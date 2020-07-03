@@ -3,27 +3,50 @@ import NavigationItem from "./../NavigationItem/NavigationItem";
 import Aux from "./../../../hoc/Auxil/Auxil";
 // import { loginStatus } from "./../../LoginStatus";
 import UserContext from "./../../../hoc/Context/UserContext";
-import "./NavigationItems.css";
+import classes from "./NavigationItems.css";
+// import NavDropdown from "react-bootstrap/NavDropdown";
+// import Nav from "react-bootstrap/Nav";
 
+import { link } from "react-router-dom";
+// import { AiOutlineHome } from "react-icons/ai";
 const NavigationItems = () => {
   const value = useContext(UserContext);
+  // const Profile = (
+  //   // <Nav>
+  //   //   <NavDropdown title="Authentication">
+  //   //     <NavDropdown.Item href="/users/login">Login</NavDropdown.Item>
+  //   //     <NavDropdown.Item href="/users/signup">SignUp</NavDropdown.Item>
+  //   //     <NavDropdown.Divider />
+  //   //     <NavDropdown.Item href="/users/guestSession">
+  //   //       Continue <br /> as Guest
+  //   //     </NavDropdown.Item>
+  //   //   </NavDropdown>
+  //   // </Nav>
+
+  // );
   return (
     <Aux>
       {!value.isLoggedin ? (
-        <ul className="NavigationItems">
-          <NavigationItem link="/" active>
-            HOME
+        <ul className={classes.NavigationItems}>
+          {/* <p>
+            <AiOutlineHome color="white" size="13px" /> */}
+          {/* <h1 className={classes.Header}>POSTBOX</h1> */}
+          <NavigationItem link="/" active icon="home">
+            Home
           </NavigationItem>
+          {/* </p> */}
           <NavigationItem link="/login">Sign in</NavigationItem>
           <NavigationItem link="/signup">Sign up</NavigationItem>
-          <NavigationItem link="/new-post">New Post</NavigationItem>
+          <NavigationItem link="/new-post">Create</NavigationItem>
         </ul>
       ) : (
-        <ul className="NavigationItems">
+        <ul className={classes.NavigationItems}>
+          {/* <h1 className={classes.Header}>POSTBOX</h1> */}
           <NavigationItem link="/" active>
-            HOME
+            Home
           </NavigationItem>
-          <NavigationItem link="/new-post">New Post</NavigationItem>
+          <NavigationItem link="/new-post">Create</NavigationItem>
+          {/* {Profile} */}
           <NavigationItem link="/login">Profile</NavigationItem>
         </ul>
       )}

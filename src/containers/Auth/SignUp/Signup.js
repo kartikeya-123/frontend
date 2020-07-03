@@ -4,7 +4,7 @@ import Spinner from "../../../components/UI/Spinner/Spinner";
 import axios from "axios";
 
 import { NavLink } from "react-router-dom";
-import "./Signup.css";
+import classes from "./Signup.css";
 class Signup extends Component {
   state = {
     name: "",
@@ -74,9 +74,9 @@ class Signup extends Component {
   // };
   render() {
     let loggedInPage = (
-      <div className="Login">
-        <div className="Form">
-          <h1>SIGN UP</h1>
+      <div className={classes.Login}>
+        <div className={classes.Form}>
+          <h2>Sign up</h2>
           <input
             type="text"
             value={this.state.name}
@@ -114,14 +114,16 @@ class Signup extends Component {
             onChange={(event) =>
               this.setState({ passwordConfirm: event.target.value })
             }
-            placeholder="Retype password"
+            placeholder="Confirm password"
             required
           />
-          <Button btnType="Success" clicked={this.SignupUserHandler}>
-            Sign Up
-          </Button>
-          <p>
-            Already a member ?<NavLink to="/login">Login</NavLink>
+          <div className={classes.Button}>
+            <Button btnType="Authenticate" clicked={this.loginUserHandler}>
+              Signup
+            </Button>
+          </div>
+          <p className={classes.link}>
+            <NavLink to="/login">Already a member ?Login</NavLink>
           </p>
         </div>
       </div>

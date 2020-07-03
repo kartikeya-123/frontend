@@ -2,33 +2,21 @@ import React, { Component } from "react";
 import Post from "./../../components/Post/Post";
 import Aux from "./../../hoc/Auxil/Auxil";
 // import FullPost from "./../FullPost/FullPost";
-import "./Posts.css";
+import classes from "./Posts.css";
 import axios from "axios";
 import Spinner from "./../../components/UI/Spinner/Spinner";
+import UserContext from "./../../hoc/Context/UserContext";
+import { AiFillWindows } from "react-icons/ai";
 // import {Link} from 'react-router-dom'
 // import Button from './../../components/UI/Button/Button'
 class Posts extends Component {
   state = {
     posts: [],
     isLoading: true,
+    showConfirmMessage: false,
+    blacklisted: false,
   };
-
-  checkIsLoggedIn = () => {
-    this.setState({ isLoading: true });
-    axios
-      .get("http://localhost:7000/api/v1/users/loginStatus", {
-        withCredentials: true,
-      })
-      .then((response) => {
-        console.log(response.data);
-        this.setState({ isLoggedin: true, isLoading: false });
-      })
-      .catch((err) => {
-        console.log(err);
-        this.setState({ isLoading: false });
-      });
-  };
-
+  static contextType = UserContext;
   componentDidMount() {
     // connecting with server
     console.log(this.props);
@@ -37,9 +25,8 @@ class Posts extends Component {
       .get("http://localhost:7000/api/v1/posts")
       .then((response) => {
         // console.log(response.data.data.docs);
-        const posts = response.data.data.docs.slice(0, 8);
+        const posts = response.data.data.docs.slice(0, 20);
         this.setState({ posts: posts, isLoading: false });
-        this.checkIsLoggedIn();
       })
       .catch((error) => {
         console.log(error);
@@ -49,6 +36,32 @@ class Posts extends Component {
   fullPostHandler = (id) => {
     // window.alert("post clicked");
     this.props.history.push("/posts/" + id);
+  };
+
+  confirmBlacklist = () => {
+    this.setState({ showConfirmMessage: true });
+  };
+  closeModal = () => {
+    this.setState({ showConfirmMessage: false });
+  };
+
+  blacklistPostHandler = (id) => {
+    // console.log("blacklisted");
+    const data = {
+      Blacklist: true,
+    };
+    axios
+      .patch(`http://localhost:7000/api/v1/posts/blacklist/${id}`, data, {
+        withCredentials: true,
+      })
+      .then((response) => {
+        console.log(response.data);
+        // window.location.reload(false);
+        this.setState({ showConfirmMessage: false, blacklisted: true });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
   render() {
     let posts;
@@ -61,9 +74,16 @@ class Posts extends Component {
             title={currPost.title}
             author={currPost.author}
             upvotes={currPost.upvotes}
+            downvotes={currPost.downvotes}
+            body={currPost.body}
             key={currPost._id}
             clicked={() => this.fullPostHandler(currPost._id)}
             isLoggedin={this.state.isLoggedin}
+            userRole={this.context.role}
+            confirmBlacklist={this.confirmBlacklist}
+            showConfirmMessage={this.state.showConfirmMessage}
+            goBack={this.closeModal}
+            blacklistPost={() => this.blacklistPostHandler(currPost._id)}
           />
         );
       });
@@ -71,12 +91,23 @@ class Posts extends Component {
 
     return (
       <Aux>
-        <div>
-          <h1 className="Header">
-            <strong>RECENT POSTS</strong>
-          </h1>
-        </div>
-        <section className="Posts">{posts}</section>
+        <article>
+          {/* <section className={classes.Posts}>
+            <div className={classes.Header}>
+              <h1>
+                <strong>Welcome to Postbox</strong>
+              </h1>
+            </div>
+          </section> */}
+          <section className={classes.Posts}>
+            <div className={classes.Header}>
+              <h1>
+                <strong>Recent Posts</strong>
+              </h1>
+            </div>
+          </section>
+          <section className={classes.Posts}>{posts}</section>
+        </article>
       </Aux>
     );
   }
