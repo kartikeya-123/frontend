@@ -5,9 +5,10 @@ const jwt = require('jsonwebtoken');
 const AppError = require('../utils/appError'); // class//
 const { promisify } = require('util');
 const mongoose = require('mongoose');
-const sendEmail = require('../utils/email');
+const Email = require('../utils/email');
 const bcrypt = require('bcryptjs');
 const Token = require('./../models/tokenModel.js');
+const { RSA_NO_PADDING, ESRCH } = require('constants');
 // preparing a token
 const createToken = (id) => {
   const jwtToken = jwt.sign({ id }, process.env.JWT_SECRET_KEY, {
@@ -27,6 +28,19 @@ const createSendToken = (user, statusCode, res) => {
   // not showing the password while signup//
   user.password = undefined;
 
+  // sending a cookie to the browser which stores the jwt token//
+  const cookieOptions = {
+    expires: new Date(
+      Date.now() + process.env.JWT_TOKEN_COOKIE_EXPIRES * 24 * 60 * 60 * 1000
+    ),
+    httpOnly: true,
+  };
+
+  if (process.env.NODE_ENV === 'Production') {
+    cookieOptions.secure = true;
+  }
+
+  res.cookie('jwt', token, cookieOptions);
   res.status(statusCode).json({
     status: 'success',
     token,
@@ -56,6 +70,7 @@ exports.signupVerification = catchAsync(async (req, res, next) => {
 
   // sending a jwt
   createSendToken(token.user, 201, res);
+
   token.user = undefined;
   token.hashedToken = undefined;
   await token.save({ validateBeforeSave: false });
@@ -87,19 +102,13 @@ exports.signup = catchAsync(async (req, res, next) => {
     user: newUser,
   });
 
-  const emailVerify = `${req.protocol}://${req.get(
+  const emailVerifyUrl = `${req.protocol}://${req.get(
     'host'
   )}/api/v1/users/signup/${token}`;
 
-  const verify_message = `Hey user to signup , there is one step more , click the link : ${emailVerify}`;
-
   try {
     //sending email to the given email
-    await sendEmail({
-      email: req.body.email,
-      subject: 'signup verification email',
-      text: verify_message,
-    });
+    await new Email(newUser, emailVerifyUrl).sendWelcome();
 
     res.status(200).json({
       status: 'success',
@@ -114,19 +123,21 @@ exports.login = catchAsync(async (req, res, next) => {
   if (!req.body.email || !req.body.password) {
     return next(new AppError('please mention your email id and password', 400));
   }
-
+  // console.log(req.body);
   const { email, password } = req.body;
 
   const user = await User.findOne({ email }).select('+password');
+
+  // checking the two password//
+  if (!user || !(await user.correctPassword(password, user.password))) {
+    return next(new AppError('incorrect email or password', 401));
+  }
   if (user.Blacklist) {
     return next(
       new AppError('sorry you have been blacklisted by the admin', 400)
     );
   }
-  // checking the two password//
-  if (!user || !(await user.correctPassword(password, user.password))) {
-    return next(new AppError('incorrect email or password', 401));
-  }
+
   //step 4 generate token
   createSendToken(user, 200, res);
 });
@@ -134,11 +145,15 @@ exports.login = catchAsync(async (req, res, next) => {
 //getting access to resources//
 exports.protect = catchAsync(async (req, res, next) => {
   let token;
+  // console.log(req.cookies.jwt);
   if (
     req.headers.authorization &&
     req.headers.authorization.startsWith('Bearer')
   ) {
     token = req.headers.authorization.split(' ')[1];
+  } else if (req.cookies.jwt) {
+    // console.log(req.cookies.jwt);
+    token = req.cookies.jwt;
   }
 
   if (!token) {
@@ -225,7 +240,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   }
 
   // 2) Generate the random reset token
-  const resetToken = user.createPasswordRandomToken();
+  const resetToken = user.createPasswordResetToken();
   await user.save({ validateBeforeSave: false });
 
   // 3) Send it to user's email
@@ -233,18 +248,13 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
     'host'
   )}/api/v1/users/resetPassword/${resetToken}`;
 
-  const message = `Forgot your password? Submit a PATCH request with your new password and passwordConfirm to: ${resetURL}.\nIf you didn't forget your password, please ignore this email!`;
+  const message = `Forgot your password? No problem ! . Your Reset token is ${resetToken} `;
 
   try {
-    await sendEmail({
-      email: user.email,
-      subject: 'Your password reset token (valid for 10 min)',
-      text: message,
-    });
-
+    await new Email(user, resetToken).sendResetToken();
     res.status(200).json({
       status: 'success',
-      message: 'Token sent to email!',
+      message: message,
     });
   } catch (err) {
     user.passwordResetToken = undefined;
@@ -303,3 +313,28 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   createSendToken(user, 200, res);
   next();
 });
+
+// this tells whether the user is logged in or not//
+exports.isLoggedIn = (req, res, next) => {
+  // if the route has reached this function means it is either logged in //
+
+  res.status(200).json({
+    status: 'success',
+    message: 'logged in',
+    role: req.user.role,
+  });
+};
+
+exports.logout = (req, res, next) => {
+  // // console.log(req.cookies.jwt);
+  // console.log(document.cookie);
+  // // console.log(req.cookies.jwt);
+
+  res.clearCookie('jwt', {
+    path: '/',
+  });
+  res.status(200).json({
+    status: 'success',
+    message: 'logged out',
+  });
+};

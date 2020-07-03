@@ -14,13 +14,14 @@ mongoose
     useNewUrlParser: true,
     useCreateIndex: true,
     useUnifiedTopology: true,
+    useFindAndModify: false,
   })
   .then(() => {
     console.log('db connection successful');
   });
 
 // connection to the port//
-const port = 3000;
+const port = 7000;
 
 app.listen(port, () => {
   console.log(`listening to port ${port}`);

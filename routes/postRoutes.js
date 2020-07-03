@@ -7,7 +7,7 @@ const router = express.Router();
 router
   .route('/')
   .get(postController.getAllPosts)
-  .post(postController.createPost);
+  .post(authController.protect, postController.createPost);
 
 router.patch(
   '/blacklist/:id',
@@ -21,7 +21,7 @@ router.patch(
   authController.protect,
   postController.downvotePost
 );
-
+router.get('/my-posts', authController.protect, postController.getPostsOfUser);
 router
   .route('/:id')
   .get(postController.checkBlacklist, postController.getPost)
@@ -31,9 +31,10 @@ router
     factory.checkBlacklist,
     postController.updatePost
   )
-  .delete(
+  .post(
     authController.protect,
-    authController.restrictTo('admin'),
+    // authController.restrictTo('admin'),
+    postController.restrict,
     postController.deletePost
   );
 module.exports = router;

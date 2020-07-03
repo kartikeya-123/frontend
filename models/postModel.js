@@ -9,12 +9,10 @@ const postSchema = new mongoose.Schema(
     slug: String,
     author: {
       type: String,
-      required: [true, 'A post should have author'],
     },
     body: {
       type: String,
       required: [true, 'A post should contain info'],
-      trim: true,
     },
     upvotedBy: [
       {
@@ -44,7 +42,7 @@ const postSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    users: {
+    User: {
       type: mongoose.Schema.ObjectId,
       ref: 'User',
     },
@@ -66,6 +64,13 @@ postSchema.pre(/^find/, function (next) {
   });
   next();
 });
+
+// postSchema.pre('save', function (req, res, next) {
+//   // this.User = req.user.id;
+//   // this.author = req.user.name;
+//   console.log(this.body);
+//   next();
+// });
 
 const Post = mongoose.model('Post', postSchema);
 

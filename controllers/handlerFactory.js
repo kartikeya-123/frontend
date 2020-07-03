@@ -1,6 +1,8 @@
 const APIFeatures = require('./../utils/apiFeatures');
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError'); // class//
+const User = require('./../models/userModel');
+const Post = require('./../models/postModel');
 
 exports.deleteOne = (Model) =>
   catchAsync(async (req, res, next) => {
@@ -33,6 +35,23 @@ exports.createOne = (Model) =>
   catchAsync(async (req, res, next) => {
     const newdoc = await Model.create(req.body);
 
+    if (Model === Post) {
+      // console.log(req.user.name);
+      newdoc.User = req.user.id;
+      newdoc.author = req.user.name;
+      await newdoc.save({ runValidators: false });
+    }
+    // if (newdoc) {
+    //   const user = await User.findByIdAndUpdate(
+    //     req.user.id,
+    //     {
+    //       $push: { posts: [newdoc._id] },
+    //     },
+    //     {
+    //       new: true,
+    //       runValidators: true
+    //     }
+    //   );
     res.status(201).json({
       status: 'success',
       data: {
@@ -65,10 +84,14 @@ exports.getAll = (Model) =>
   catchAsync(async (req, res) => {
     // samll hack for nested get //
     let filter = {};
-    if (req.params.tourId)
+    if (req.params.tourId) {
       filter: {
         Model: req.params.tourId;
       }
+    }
+    req.query = {
+      Blacklist: 'false',
+    };
     let docs;
     const features = new APIFeatures(Model.find(filter), req.query)
       .filter()

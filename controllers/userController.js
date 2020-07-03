@@ -47,6 +47,8 @@ exports.getMe = (req, res, next) => {
   next();
 };
 
+// exports.addPosttoUser = catchAsync
+
 exports.getAllUsers = factory.getAll(User);
 
 exports.getUser = factory.getOne(User);
