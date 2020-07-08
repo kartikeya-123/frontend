@@ -1,0 +1,20 @@
+db
+db
+dbs
+use natours-test
+db
+db.show()
+show()
+db.find()
+db.use.tours
+show dbs
+use natours-test
+show collections
+dbs.tours.find()
+db.tours.find()
+db.tours.insertMany([{name : "money heist",price : 290 ,rating : 4.6},{name : "Friends", price : 300 ,rating :5.2,comme}])
+show dbs
+use natours1
+db.tours.find()
+show dbs
+use natours1

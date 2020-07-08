@@ -1,10 +1,10 @@
 .toolbar {
-  height: 50px;
+  height: 55px;
   width: 100%;
   position: fixed;
   top: 0;
   left: 0;
-  background-color: lightcoral;
+  background-color: rgb(51, 48, 48);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -12,7 +12,17 @@
   box-sizing: border-box;
   z-index: 90;
 }
-
+.Logo {
+  height: 10%;
+}
+.header {
+  color: rgb(206, 136, 7);
+}
 .toolbar nav {
   height: 100%;
+}
+@media (max-width: 499px) {
+  .DesktopOnly {
+    display: none;
+  }
 }

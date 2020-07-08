@@ -1,0 +1,8 @@
+"*":
+  core: {}
+  editor:
+    fontSize: 18
+  "exception-reporting":
+    userId: "0846da72-e7b9-4a51-8bed-592cb84ec3f1"
+  "tree-view":
+    hideVcsIgnoredFiles: true

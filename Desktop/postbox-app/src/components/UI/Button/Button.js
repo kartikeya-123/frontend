@@ -1,31 +1,13 @@
 import React from "react";
-import "./Button.css";
+import classes from "./Button.css";
 
-const button = (props) => {
-  // if(props.btnType="Success")
-  let classProperty;
-  switch (props.btnType) {
-    case "Success":
-      classProperty = "Button Success";
-      break;
-    case "Danger":
-      classProperty = "Button Danger";
-      break;
-    case "Authenticate":
-      classProperty = "Button Authenticate";
-      break;
-    default:
-      classProperty = "Button";
-      break;
-  }
-  if (props.selected) {
-    classProperty = "disabled";
-  }
-  return (
-    <button className={classProperty} onClick={props.clicked}>
-      {props.children}
-    </button>
-  );
-};
+const button = (props) => (
+  <button
+    className={[classes.Button, classes[props.btnType]].join(" ")}
+    onClick={props.clicked}
+  >
+    {props.children}
+  </button>
+);
 
 export default button;

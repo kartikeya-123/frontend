@@ -1,6 +1,6 @@
 .Login {
   width: 360px;
-  padding: 8% 0 0;
+  /* padding: 8% 0 0; */
   margin: auto;
 }
 
@@ -10,8 +10,9 @@
   background: #ffffff;
   max-width: 360px;
   margin: 0 auto 100px;
-  padding: 45px;
+  padding: 10px 10px;
   text-align: center;
+  /* position: absolute; */
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 }
 .Form input {
@@ -20,22 +21,25 @@
   background: #f2f2f2;
   width: 80%;
   border: 0;
-  margin: 15px 15px 15px 10px;
+  margin-left: 29px;
+  margin-bottom: 6px;
   padding: 12px;
   box-sizing: border-box;
   font-size: 14px;
 }
-.Form h1 {
-  color: royalblue;
+.Form h2 {
+  color: rgb(39, 47, 170);
   font-style: inherit;
+  text-shadow: green;
   text-align: center;
+  margin-top: 0px;
   padding: 0px 5px 0px 0px;
-  font: size 2;
+  font-size: x-large;
   box-sizing: content-box;
 }
 @media (min-width: 600px) {
-  .ContactData {
-    width: 500px;
+  .Login {
+    width: 400px;
   }
 }
 
@@ -49,7 +53,10 @@
   display: block;
   box-sizing: border-box;
 }
-
+.Button {
+  position: relative;
+  text-align: right;
+}
 .link a:hover,
 .link a:active {
   color: darkblue;

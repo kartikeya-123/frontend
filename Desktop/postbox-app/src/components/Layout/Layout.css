@@ -1,15 +1,16 @@
-.Welcome {
+/* .Welcome {
   margin-top: 50px;
   height: 150px;
   width: 100%;
-  background-color: lightgray;
-  color: black;
+  background-color: rgb(192, 67, 67);
+  color: white;
   font-size: 200%;
   font-weight: bold;
   padding: 100px 0px 0px 32px;
-}
-body {
-  background-color: rgba(240, 240, 240, 0.972);
+} */
+Body {
+  margin-top: 65px;
   height: 300%;
   width: 100%;
+  background-color: rgb(231, 230, 230);
 }

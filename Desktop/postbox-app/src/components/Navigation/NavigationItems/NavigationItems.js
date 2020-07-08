@@ -1,61 +1,57 @@
-import React, { Component } from "react";
+import React, { useContext } from "react";
 import NavigationItem from "./../NavigationItem/NavigationItem";
 import Aux from "./../../../hoc/Auxil/Auxil";
 // import { loginStatus } from "./../../LoginStatus";
-import "./NavigationItems.css";
+import UserContext from "./../../../hoc/Context/UserContext";
+import classes from "./NavigationItems.css";
+// import NavDropdown from "react-bootstrap/NavDropdown";
+// import Nav from "react-bootstrap/Nav";
 
-class NavigationItems extends Component {
-  state = {
-    isLoggedin: false,
-    isLoading: false,
-  };
+import { link } from "react-router-dom";
+// import { AiOutlineHome } from "react-icons/ai";
+const NavigationItems = () => {
+  const value = useContext(UserContext);
+  // const Profile = (
+  //   // <Nav>
+  //   //   <NavDropdown title="Authentication">
+  //   //     <NavDropdown.Item href="/users/login">Login</NavDropdown.Item>
+  //   //     <NavDropdown.Item href="/users/signup">SignUp</NavDropdown.Item>
+  //   //     <NavDropdown.Divider />
+  //   //     <NavDropdown.Item href="/users/guestSession">
+  //   //       Continue <br /> as Guest
+  //   //     </NavDropdown.Item>
+  //   //   </NavDropdown>
+  //   // </Nav>
 
-  // checkIsLoggedIn = () => {
-  //   this.setState({ isLoading: true });
-  //   axios
-  //     .get("http://localhost:7000/api/v1/users/loginStatus", {
-  //       withCredentials: true,
-  //     })
-  //     .then((response) => {
-  //       console.log(response.data);
-  //       this.setState({ isLoggedin: true, isLoading: false });
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //       this.setState({ isLoading: false });
-  //     });
-  // };
-  componentDidMount() {
-    this.setState({ isLoggedin: this.props.isLoggedin });
-  }
-  // componentWillUpdate() {
-  //   this.setState({ isLoggedin: this.props.isLoggedin });
-  // }
-
-  render() {
-    return (
-      <Aux>
-        {!this.props.isLoggedin ? (
-          <ul className="NavigationItems">
-            <NavigationItem link="/" active>
-              HOME
-            </NavigationItem>
-            <NavigationItem link="/login">Sign in</NavigationItem>
-            <NavigationItem link="/signup">Sign up</NavigationItem>
-            <NavigationItem link="/new-post">New Post</NavigationItem>
-          </ul>
-        ) : (
-          <ul className="NavigationItems">
-            <NavigationItem link="/" active>
-              HOME
-            </NavigationItem>
-            <NavigationItem link="/new-post">New Post</NavigationItem>
-            <NavigationItem link="/login">LOGOUT</NavigationItem>
-          </ul>
-        )}
-      </Aux>
-    );
-  }
-}
+  // );
+  return (
+    <Aux>
+      {!value.isLoggedin ? (
+        <ul className={classes.NavigationItems}>
+          {/* <p>
+            <AiOutlineHome color="white" size="13px" /> */}
+          {/* <h1 className={classes.Header}>POSTBOX</h1> */}
+          <NavigationItem link="/" active icon="home">
+            Home
+          </NavigationItem>
+          {/* </p> */}
+          <NavigationItem link="/login">Sign in</NavigationItem>
+          <NavigationItem link="/signup">Sign up</NavigationItem>
+          <NavigationItem link="/new-post">Create</NavigationItem>
+        </ul>
+      ) : (
+        <ul className={classes.NavigationItems}>
+          {/* <h1 className={classes.Header}>POSTBOX</h1> */}
+          <NavigationItem link="/" active>
+            Home
+          </NavigationItem>
+          <NavigationItem link="/new-post">Create</NavigationItem>
+          {/* {Profile} */}
+          <NavigationItem link="/login">Profile</NavigationItem>
+        </ul>
+      )}
+    </Aux>
+  );
+};
 
 export default NavigationItems;

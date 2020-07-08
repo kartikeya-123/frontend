@@ -1,18 +1,18 @@
 import React, { Component } from "react";
-import Button from "./../../components/UI/Button/Button";
+// import Button from "./../../components/UI/Button/Button";
 import axios from "axios";
-
-import "./FullPost.css";
-
+import UserContext from "./../../hoc/Context/UserContext";
+import classes from "./FullPost.css";
+import { AiFillLike } from "react-icons/ai";
+import { AiFillDislike } from "react-icons/ai";
 class FullPost extends Component {
   state = {
     loadedPost: null,
     upvoted: false,
     downvoted: false,
   };
-
+  static contextType = UserContext;
   componentDidMount() {
-    console.log(this.props.location.state.isLoggedin);
     this.loadData();
   }
 
@@ -56,10 +56,12 @@ class FullPost extends Component {
   //   };
 
   upvotedPost = () => {
+    const post = this.state.loadedPost;
     axios
-      .get(
+      .patch(
         "http://localhost:7000/api/v1/posts/upvote/" +
           this.props.match.params.id,
+        post,
         { withCredentials: true }
       )
       .then((response) => {
@@ -69,10 +71,12 @@ class FullPost extends Component {
   };
 
   downVotedPost = () => {
+    const post = this.state.loadedPost;
     axios
-      .get(
+      .patch(
         "http://localhost:7000/api/v1/posts/downvote/" +
           this.props.match.params.id,
+        post,
         { withCredentials: true }
       )
       .then((response) => {
@@ -86,9 +90,18 @@ class FullPost extends Component {
     if (this.props.match.params.id) {
       post = <p style={{ textAlign: "center" }}>Loading...!</p>;
     }
+    let cursor = null;
+    let upvote = null;
+    let downvote = null;
+    if (this.context.isLoggedin) {
+      cursor = "pointer";
+      upvote = this.upvotedPost;
+      downvote = this.downVotedPost;
+    }
+
     if (this.state.loadedPost) {
       post = (
-        <div className="FullPost">
+        <div className={classes.FullPost}>
           <h1>{this.state.loadedPost.title}</h1>
           <p>{this.state.loadedPost.body}</p>
           {/* <div className="Edit">
@@ -97,37 +110,30 @@ class FullPost extends Component {
             </button>
           </div> */}
           <h4>Post By : {this.state.loadedPost.author}</h4>
-          {!this.props.location.state.isLoggedin ? (
-            <div className="Properties">
-              <p className="Votes">upvotes:{this.state.loadedPost.upvotes}</p>
-              <p className="Votes">
-                downvotes:{this.state.loadedPost.downvotes}
-              </p>
-            </div>
-          ) : (
-            <div className="Properties">
-              <p className="Votes">
-                <Button
-                  btnType="Success"
-                  clicked={this.upvotedPost}
-                  selected={this.state.upvoted}
-                >
-                  Upvotes
-                </Button>
-                {this.state.loadedPost.upvotes}
-              </p>
-              <p className="Votes">
-                <Button
-                  btnType="Danger"
-                  clicked={this.downVotedPost}
-                  selected={this.state.downvoted}
-                >
-                  Downvotes
-                </Button>
-                {this.state.loadedPost.downvotes}
-              </p>
-            </div>
-          )}
+          <div className={classes.Properties}>
+            <p className={classes.Votes}>
+              <AiFillLike
+                onClick={upvote}
+                // selected={this.state.upvoted}
+                cursor={cursor}
+                color="rgb(13, 188, 247)"
+                size="28px"
+              />
+              <br></br>
+              {this.state.loadedPost.upvotes}
+            </p>
+            <p className={classes.Votes}>
+              <AiFillDislike
+                onClick={downvote}
+                // selected={this.state.upvoted}
+                cursor={cursor}
+                color="#fb655a"
+                size="28px"
+              />
+              <br></br>
+              {this.state.loadedPost.downvotes}
+            </p>
+          </div>
         </div>
       );
     }

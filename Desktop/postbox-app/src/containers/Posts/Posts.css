@@ -6,9 +6,33 @@
   margin: auto;
 }
 .Header {
-  font-size: 200%;
-  color: rgb(25, 202, 25);
+  width: 70%;
+  padding: 6px;
   text-align: center;
-  font-weight: bolder;
-  font-style: initial;
+  border: 1px solid #eee;
+  box-shadow: 0 2px 3px rgb(197, 186, 186);
+  margin: 10px;
+  border-radius: 10px;
+
+  box-sizing: border-box;
+  /* cursor: pointer; */
+  position: relative;
+  background-color: rgb(226, 199, 226);
+  color: rgb(10, 10, 151) !important;
+  font-family: Georgia, "Times New Roman", serif !important;
+  font-size: 24px !important;
+  font-style: italic !important;
+  font-weight: bolder !important;
+  text-align: center !important;
+  text-decoration: none !important;
+}
+@media only screen and (max-width: 900px) {
+  .Header {
+    width: 540px;
+  }
+}
+@media (max-width: 600px) {
+  .Header {
+    width: 100%;
+  }
 }
