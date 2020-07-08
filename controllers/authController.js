@@ -60,21 +60,21 @@ exports.signupVerification = catchAsync(async (req, res, next) => {
     .update(req.params.token)
     .digest('hex');
 
-  const token = await Token.findOne({
-    hashedToken: hashedToken,
-    tokenExpiresAt: { $gt: Date.now() },
-  }).select('user');
-  if (!token) {
+  const user = await User.findOne({
+    signupToken: hashedToken,
+    signupTokenExpiresAt: { $gt: Date.now() },
+  });
+  if (!user) {
     return next(new AppError('There is a problem , please signup again', 404));
   }
 
   // sending a jwt
-  createSendToken(token.user, 201, res);
+  createSendToken(user, 201, res);
 
-  token.user = undefined;
-  token.hashedToken = undefined;
-  await token.save({ validateBeforeSave: false });
-  next();
+  user.signupToken = undefined;
+  user.signupTokenExpiresAt = undefined;
+  await user.save({ validateBeforeSave: false });
+  // next();
 });
 
 exports.signup = catchAsync(async (req, res, next) => {
@@ -84,31 +84,29 @@ exports.signup = catchAsync(async (req, res, next) => {
   }
 
   // we can now create a account and send a jwt//
-  const newUser = await User.create({
-    name: req.body.name,
-    email: req.body.email,
-    password: req.body.password,
-    passwordConfirm: req.body.passwordConfirm,
-  });
 
   // creating a random token using the email id //
   const token = crypto.randomBytes(32).toString('hex');
 
   const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
 
-  const t = await Token.create({
-    hashedToken: hashedToken,
-    tokenExpiresAt: Date.now() + 10 * 60 * 1000,
-    user: newUser,
+  const newUser = await User.create({
+    name: req.body.name,
+    email: req.body.email,
+    password: req.body.password,
+    passwordConfirm: req.body.passwordConfirm,
+    signupToken: hashedToken,
+    signupTokenExpiresAt: Date.now() + 10 * 60 * 1000,
   });
-
-  const emailVerifyUrl = `${req.protocol}://${req.get(
-    'host'
-  )}/api/v1/users/signup/${token}`;
+  // const t = await Token.create({
+  //   hashedToken: hashedToken,
+  //   tokenExpiresAt: Date.now() + 10 * 60 * 1000,
+  //   user: newUser,
+  // });
 
   try {
     //sending email to the given email
-    await new Email(newUser, emailVerifyUrl).sendWelcome();
+    await new Email(newUser, token).sendWelcome();
 
     res.status(200).json({
       status: 'success',
@@ -302,6 +300,7 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
 
   const user = await User.findById(req.user.id).select('+password');
   //check if posted password is coorecet
+
   if (!(await user.correctPassword(req.body.passwordCurrent, user.password))) {
     return next(new AppError('the old password is not correct ', 401));
   }
@@ -321,7 +320,7 @@ exports.isLoggedIn = (req, res, next) => {
   res.status(200).json({
     status: 'success',
     message: 'logged in',
-    role: req.user.role,
+    user: req.user,
   });
 };
 

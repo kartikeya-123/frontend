@@ -21,7 +21,12 @@ router.patch(
   authController.protect,
   postController.downvotePost
 );
-router.get('/my-posts', authController.protect, postController.getPostsOfUser);
+router.get(
+  '/my-posts',
+  authController.protect,
+  postController.getUser,
+  postController.getAllPosts
+);
 router
   .route('/:id')
   .get(postController.checkBlacklist, postController.getPost)

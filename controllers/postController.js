@@ -47,25 +47,28 @@ exports.upvotePost = catchAsync(async (req, res, next) => {
   if (!post) {
     return next(new AppError('there is no post with this id', 400));
   }
-  var i;
+  var i,
+    flag = 0;
   for (i = 0; i < post.upvotedBy.length; i++) {
     if (post.upvotedBy[i]._id == req.user.id) {
-      return next(new AppError('post already upvoted', 400));
+      post.upvotedBy.splice(i, 1);
+      flag = 1;
     }
   }
-
+  if (flag === 0) post.upvotedBy.push(req.user.id);
   for (i = 0; i < post.downvotedBy.length; i++) {
     if (post.downvotedBy[i]._id == req.user.id) {
       post.downvotedBy.splice(i, 1);
     }
   }
   post.downvotes = post.downvotedBy.length;
-  post.upvotedBy.push(req.user.id);
   post.upvotes = post.upvotedBy.length;
   await post.save({ runValidators: false });
   res.status(200).json({
     status: 'success',
     message: 'post upvoted',
+    upvotes: post.upvotes,
+    downvotes: post.downvotes,
   });
 });
 
@@ -74,19 +77,22 @@ exports.downvotePost = catchAsync(async (req, res, next) => {
   if (!post) {
     return next(new AppError('there is no post with this id', 400));
   }
-  var i;
+  var i,
+    flag = 0;
+
   for (i = 0; i < post.downvotedBy.length; i++) {
     if (post.downvotedBy[i]._id == req.user.id) {
-      return next(new AppError('post already downvoted', 400));
+      post.downvotedBy.splice(i, 1);
+      flag = 1;
     }
   }
+  if (flag === 0) post.downvotedBy.push(req.user.id);
 
   for (i = 0; i < post.upvotedBy.length; i++) {
     if (post.upvotedBy[i]._id == req.user.id) {
       post.upvotedBy.splice(i, 1);
     }
   }
-  post.downvotedBy.push(req.user.id);
 
   post.downvotes = post.downvotedBy.length;
   post.upvotes = post.upvotedBy.length;
@@ -94,19 +100,25 @@ exports.downvotePost = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: 'success',
     message: 'post downvoted',
+    upvotes: post.upvotes,
+    downvotes: post.downvotes,
   });
 });
 
 exports.checkBlacklist = factory.checkBlacklist(Post);
 
-exports.getPostsOfUser = catchAsync(async (req, res, next) => {
-  const posts = await Post.find({ User: req.user.id });
+exports.getUser = catchAsync(async (req, res, next) => {
+  // const posts = await Post.find({ User: req.user.id });
 
-  res.status(200).json({
-    status: 'success',
-    total_posts: posts.length,
-    data: {
-      posts,
-    },
-  });
+  // res.status(200).json({
+  //   status: 'success',
+  //   total_posts: posts.length,
+  //   data: {
+  //     posts,
+  //   },
+  // });
+  req.params.userId = req.user.id;
+  next();
 });
+
+// exports.getPostsUser = factory.getAll()

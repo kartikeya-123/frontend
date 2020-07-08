@@ -84,10 +84,10 @@ exports.getAll = (Model) =>
   catchAsync(async (req, res) => {
     // samll hack for nested get //
     let filter = {};
-    if (req.params.tourId) {
-      filter: {
-        Model: req.params.tourId;
-      }
+    if (Model === Post && req.params.userId) {
+      filter = {
+        User: req.params.userId,
+      };
     }
     req.query = {
       Blacklist: 'false',
