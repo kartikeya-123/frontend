@@ -1,7 +1,11 @@
 const fs = require('fs');
 const express = require('express');
 const morgan = require('morgan');
+const mongoSanitize = require('express-mongo-sanitize');
+const xss = require('xss-clean');
+
 const app = express();
+
 const userRouter = require('./routes/userRoutes.js');
 const postRouter = require('./routes/postRoutes.js');
 const cookieParser = require('cookie-parser');
@@ -12,8 +16,9 @@ const cors = require('cors');
 // post route : /v1/posts
 app.use(helmet());
 app.use(cookieParser());
+app.use(mongoSanitize());
 app.use(express.json());
-
+app.use(xss());
 if (process.env.NODE_ENV === 'development') {
   // console.log('in development');
   app.use(morgan('dev'));
@@ -31,7 +36,7 @@ if (process.env.NODE_ENV === 'development') {
 // });
 app.use(
   cors({
-    origin: 'http://localhost:3000',
+    origin: 'http://127.0.0.1:3000',
     credentials: true,
   })
 );
