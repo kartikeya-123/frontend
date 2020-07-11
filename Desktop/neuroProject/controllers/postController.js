@@ -69,6 +69,8 @@ exports.upvotePost = catchAsync(async (req, res, next) => {
     message: 'post upvoted',
     upvotes: post.upvotes,
     downvotes: post.downvotes,
+    upvotedBy: post.upvotedBy,
+    downvotedBy: post.downvotedBy,
   });
 });
 
@@ -102,6 +104,8 @@ exports.downvotePost = catchAsync(async (req, res, next) => {
     message: 'post downvoted',
     upvotes: post.upvotes,
     downvotes: post.downvotes,
+    upvotedBy: post.upvotedBy,
+    downvotedBy: post.downvotedBy,
   });
 });
 
